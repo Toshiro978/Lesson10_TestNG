@@ -5,15 +5,18 @@ import com.codeborne.selenide.SelenideConfig;
 import com.codeborne.selenide.SelenideDriver;
 import com.codeborne.selenide.TextCheck;
 import com.codeborne.selenide.WebDriverRunner;
+import com.codeborne.selenide.Configuration;
 import java.util.List;
 import java.util.logging.Level;
 import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.logging.LogType;
+import org.openqa.selenium.Cookie;
 
 public class Browser {
 
     public static void setBrowser() {
         var selenideConfig = new SelenideConfig();
+
         selenideConfig.browser("chrome");
         selenideConfig.browserSize("1280x720");
         selenideConfig.pageLoadStrategy("normal");
@@ -21,11 +24,13 @@ public class Browser {
         selenideConfig.timeout(10000);
         selenideConfig.textCheck(TextCheck.FULL_TEXT);
 
+
         var selenideDriver = new SelenideDriver(selenideConfig);
 
         // Tell Selenide use your provided WebDriver instance. Use it if you need a custom logic for creating WebDriver.
         // When using your custom webdriver, you are responsible for closing it. Selenide will not take care of it.
         WebDriverRunner.setWebDriver(selenideDriver.getAndCheckWebDriver());
+
     }
 
     public static void closeBrowser() {
