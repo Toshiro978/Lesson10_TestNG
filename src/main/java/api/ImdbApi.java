@@ -59,7 +59,7 @@ public class ImdbApi {
     public LinkedHashMap<String, String> getTopYears() throws IOException {
         var htmlString = getTopChartResponse().string();
         var document = Jsoup.parse(htmlString);
-        var yearElements = document.select(".sc-1e00898e-7");
+        var yearElements = document.select(".cli-title-metadata-item:first-child");
         var allYears = new LinkedHashMap<String, String>();
         int index = 0;
         for (Element yearElement : yearElements) {
