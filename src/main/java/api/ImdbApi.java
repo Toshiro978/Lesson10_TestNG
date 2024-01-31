@@ -7,9 +7,6 @@ import java.util.Map;
 import okhttp3.ResponseBody;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-
-
 
 public class ImdbApi {
 
@@ -23,20 +20,39 @@ public class ImdbApi {
         var htmlString = getTopChartResponse().string();
         var document = Jsoup.parse(htmlString);
         var ipcTitleElements = document.select(".ipc-title");
-        var yearElements = document.select(".sc-1e00898e-7");
         var allFilms = new LinkedHashMap<String, String>();
-       // var allYears = new LinkedHashMap<Integer, String>();
+        int i = 0;
+
         for (Element ipcTitleElement : ipcTitleElements) {
+
             var aTag = ipcTitleElement.select("a").first();
+
+            // Для успішного тесту умова форматування строки з топ 250
             if (aTag != null) {
+                i++;
+                var href = aTag.attr("href");
+                if (i < 10) {
+                    var h3Text = aTag.select("h3").text().substring(3);
+                    var link = ImdbRestClient.BASE_URL + href;
+                    allFilms.put(h3Text, link);
+                } else if (i < 100) {
+                    var h3Text = aTag.select("h3").text().substring(4);
+                    var link = ImdbRestClient.BASE_URL + href;
+                    allFilms.put(h3Text, link);
+                } else if (i <= 250) {
+                    var h3Text = aTag.select("h3").text().substring(5);
+                    var link = ImdbRestClient.BASE_URL + href;
+                    allFilms.put(h3Text, link);
+                }
+            }
+            //Без форматування тайтл в чистому вигляді
+            /* if (aTag != null) {
                 var href = aTag.attr("href");
                 var h3Text = aTag.select("h3").text();
                 var link = ImdbRestClient.BASE_URL + href;
                 allFilms.put(h3Text, link);
-
-            }
+            }*/
         }
-
         return allFilms;
     }
 
@@ -51,10 +67,9 @@ public class ImdbApi {
             index++;
             if (aTag != null) {
                 var year = aTag.text();
-                allYears.put(String.valueOf(index),year);
+                allYears.put(String.valueOf(index), year);
             }
         }
-
         return allYears;
     }
 
@@ -68,7 +83,7 @@ public class ImdbApi {
             var aTag = markElement;
             index++;
             if (aTag != null) {
-                var mark = aTag.text().substring(0,3);
+                var mark = aTag.text().substring(0, 3);
                 allMarks.put(String.valueOf(index), mark);
             }
         }
@@ -78,9 +93,11 @@ public class ImdbApi {
     public List<Map.Entry<String, String>> getTop100Films() throws IOException {
         return getTopChart().entrySet().stream().limit(100).toList();
     }
+
     public List<Map.Entry<String, String>> getTop100Years() throws IOException {
         return getTopYears().entrySet().stream().limit(100).toList();
     }
+
     public List<Map.Entry<String, String>> getTop100Marks() throws IOException {
         return getTopMarks().entrySet().stream().limit(100).toList();
     }

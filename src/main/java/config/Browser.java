@@ -1,16 +1,13 @@
 package config;
 
-import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideConfig;
 import com.codeborne.selenide.SelenideDriver;
 import com.codeborne.selenide.TextCheck;
 import com.codeborne.selenide.WebDriverRunner;
-import com.codeborne.selenide.Configuration;
 import java.util.List;
 import java.util.logging.Level;
 import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.logging.LogType;
-import org.openqa.selenium.Cookie;
 
 public class Browser {
 
