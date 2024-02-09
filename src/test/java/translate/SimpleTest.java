@@ -3,6 +3,7 @@ import static com.codeborne.selenide.Selenide.*;
 
 import com.codeborne.selenide.Condition;
 import config.Browser;
+import jdk.jfr.Description;
 import org.testng.Assert;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.DataProvider;
@@ -38,10 +39,13 @@ public class SimpleTest {
     public void setUpBrowser() {
         Browser.setBrowser();
     }
+
     @Test(dataProvider = "languages")
     public void myFirstTest(String baseUrl, String response){
+
         String dynamicURL = "https://translate.google.com/?sl=uk&tl=" + baseUrl + "&text=Я%20круто%20вивчу%20TestNG.&op=translate";
         open(dynamicURL);
+        $("[jsname='LbNpof']").shouldNotBe(Condition.visible);
         $("[jsname='W297wb']").should(Condition.visible);
         String text = $("[jsname='W297wb']").getAttribute("textContent");
         Assert.assertEquals(text, response);
